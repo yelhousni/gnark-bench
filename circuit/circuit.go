@@ -2,12 +2,15 @@ package circuit
 
 import (
 	"github.com/consensys/gnark-crypto/ecc"
-	bls12381fr "github.com/consensys/gnark-crypto/ecc/bls12-381/fr"
 	bls12377fr "github.com/consensys/gnark-crypto/ecc/bls12-377/fr"
+	bls12379fr "github.com/consensys/gnark-crypto/ecc/bls12-379/fr"
+	bls12381fr "github.com/consensys/gnark-crypto/ecc/bls12-381/fr"
 	bls24315fr "github.com/consensys/gnark-crypto/ecc/bls24-315/fr"
-	bw6761fr "github.com/consensys/gnark-crypto/ecc/bw6-761/fr"
-	bw6633fr "github.com/consensys/gnark-crypto/ecc/bw6-633/fr"
 	bn254fr "github.com/consensys/gnark-crypto/ecc/bn254/fr"
+	bw6633fr "github.com/consensys/gnark-crypto/ecc/bw6-633/fr"
+	bw6672fr "github.com/consensys/gnark-crypto/ecc/bw6-672/fr"
+	bw6761fr "github.com/consensys/gnark-crypto/ecc/bw6-761/fr"
+	bw6764fr "github.com/consensys/gnark-crypto/ecc/bw6-764/fr"
 	"github.com/consensys/gnark/frontend"
 )
 
@@ -63,6 +66,16 @@ func (d *defaultCircuit) Witness(size int, curveID ecc.ID) frontend.Circuit {
 		}
 
 		witness.Y.Assign(expectedY)
+	case ecc.BLS12_379:
+		// compute expected Y
+		var expectedY bls12379fr.Element
+		expectedY.SetInterface(2)
+		for i := 0; i < size; i++ {
+			expectedY.Mul(&expectedY, &expectedY)
+		}
+
+		witness.Y.Assign(expectedY)
+
 	case ecc.BLS24_315:
 		// compute expected Y
 		var expectedY bls24315fr.Element
@@ -72,9 +85,27 @@ func (d *defaultCircuit) Witness(size int, curveID ecc.ID) frontend.Circuit {
 		}
 
 		witness.Y.Assign(expectedY)
+	case ecc.BW6_764:
+		// compute expected Y
+		var expectedY bw6764fr.Element
+		expectedY.SetInterface(2)
+		for i := 0; i < size; i++ {
+			expectedY.Mul(&expectedY, &expectedY)
+		}
+
+		witness.Y.Assign(expectedY)
 	case ecc.BW6_761:
 		// compute expected Y
 		var expectedY bw6761fr.Element
+		expectedY.SetInterface(2)
+		for i := 0; i < size; i++ {
+			expectedY.Mul(&expectedY, &expectedY)
+		}
+
+		witness.Y.Assign(expectedY)
+	case ecc.BW6_672:
+		// compute expected Y
+		var expectedY bw6672fr.Element
 		expectedY.SetInterface(2)
 		for i := 0; i < size; i++ {
 			expectedY.Mul(&expectedY, &expectedY)
